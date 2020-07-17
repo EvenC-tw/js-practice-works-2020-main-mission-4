@@ -11,3 +11,7 @@ body {
 .disabled {
 	color: rgba(255, 0, 0, 0.8);
 }
+
+.login-modal {
+	margin-top: 103px;
+}

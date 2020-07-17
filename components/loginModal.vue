@@ -40,9 +40,6 @@
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal" @click="hideModal">
-						Close
-					</button>
 					<button type="button" class="btn btn-primary" @click="handleLogin">Login</button>
 				</div>
 			</div>
@@ -57,7 +54,7 @@ module.exports = {
 		return {
 			modal: {
 				enable: null,
-				enableClass: 'show d-block',
+				enableClass: 'show d-block login-modal',
 				title: 'Welcome Admin Dashboard',
 				type: '',
 			},
@@ -73,10 +70,6 @@ module.exports = {
 			apis.login(this.loginForm, (res) => {
 				this.$emit('getLoginData', res)
 			})
-		},
-		hideModal() {
-			this.LoginForm = {}
-			this.modal.enable = false
 		},
 	},
 	created() {
