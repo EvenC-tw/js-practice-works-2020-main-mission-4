@@ -96,7 +96,7 @@
 								class="form-check-input"
 								type="checkbox"
 								name=""
-								v-model="tempProduct.enable"
+								v-model="tempProduct.status"
 							/>
 							<label for="enable" class="form-check-label">Enable</label>
 						</div>

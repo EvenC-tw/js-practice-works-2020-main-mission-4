@@ -9,7 +9,7 @@
 					<th>Product Name</th>
 					<th>List Price</th>
 					<th>Retail Price</th>
-					<th>Enable</th>
+					<th>Status</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
@@ -20,7 +20,9 @@
 						<td>{{ product.name }}</td>
 						<td>{{ product.listPrice && product.listPrice.toLocaleString() }}</td>
 						<td>{{ product.retailPrice && product.retailPrice.toLocaleString() }}</td>
-						<td>{{ product.enable ? 'enabled' : 'disabled' }}</td>
+						<td :class="[product.status ? 'enabled' : 'disabled']">
+							{{ product.status ? 'enabled' : 'disabled' }}
+						</td>
 						<td>
 							<div class="btn-group" role="group" aria-label="Button group">
 								<button
@@ -108,7 +110,7 @@ module.exports = {
 			})
 		},
 		convert(product) {
-			const { id, title, category, content, imageUrl, enable, origin_price, price, unit } = product
+			const { id, title, category, content, imageUrl, enabled, origin_price, price, unit } = product
 			return {
 				id,
 				name: title,
@@ -116,7 +118,7 @@ module.exports = {
 				content,
 				description: '',
 				imageUrl,
-				enable,
+				status: enabled,
 				listPrice: origin_price,
 				retailPrice: price,
 				unit,
@@ -131,7 +133,7 @@ module.exports = {
 				content,
 				description,
 				imageUrl,
-				enable,
+				status,
 				listPrice,
 				retailPrice,
 				unit,
@@ -144,7 +146,7 @@ module.exports = {
 				content,
 				description,
 				imageUrl,
-				enable,
+				enabled: status,
 				origin_price: listPrice,
 				price: retailPrice,
 				unit,

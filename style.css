@@ -4,3 +4,10 @@ body {
 .opa-50 {
 	opacity: 0.5;
 }
+
+.enabled {
+	color: rgba(0, 128, 0, 0.8);
+}
+.disabled {
+	color: rgba(255, 0, 0, 0.8);
+}
