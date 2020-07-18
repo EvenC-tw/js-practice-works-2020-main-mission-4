@@ -53,7 +53,11 @@
 				<li :class="[pagination.current_page === 1 ? 'disabled' : '', 'page-item']">
 					<a class="page-link" href="#">Previous</a>
 				</li>
-				<li class="page-item" v-for="(page, index) in pagination.total_pages" :key="index">
+				<li
+					:class="[pagination.current_page === index + 1 ? 'active' : '', 'page-item']"
+					v-for="(page, index) in pagination.total_pages"
+					:key="index"
+				>
 					<a class="page-link" href="#" @click.prevent="getProductList(index + 1)">{{ index + 1 }}</a>
 				</li>
 				<li :class="[pagination.current_page === pagination.total_pages ? 'disabled' : '', 'page-item']">
