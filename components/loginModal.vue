@@ -64,7 +64,6 @@ module.exports = {
 			},
 		}
 	},
-	created() {},
 	methods: {
 		handleLogin() {
 			apis.login(this.loginForm, (res) => {
