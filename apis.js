@@ -9,21 +9,18 @@ const proxies = {
 		})()
 	},
 	errorPX(err) {
-		const {
-			response: { status },
-		} = err
-		console.log(status)
-		// if (status !== 200)
 		// TODO some error handle
-		switch (status) {
-			case 401:
-				document.cookie = `token=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`
-				setAxios.setHead('Authorization', `Bearer ${token}`)
-				location.reload()
-				break
+		if (err && err.response && response.status) {
+			switch (status) {
+				case 401:
+					document.cookie = `token=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`
+					setAxios.setHead('Authorization', `Bearer ${token}`)
+					location.reload()
+					break
 
-			default:
-				break
+				default:
+					break
+			}
 		}
 	},
 }
@@ -43,7 +40,7 @@ const apis = {
 	getProductList(data, callback) {
 		const { page } = data
 		axios
-			.get(`${uuid}/admin/ec/products?page=${page}`, data)
+			.get(`${uuid}/admin/ec/products?page=${page}`)
 			.then((res) => proxies.callbackPX(res, callback))
 			.catch(proxies.errorPX)
 	},

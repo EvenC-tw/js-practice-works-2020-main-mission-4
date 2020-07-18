@@ -33,8 +33,8 @@
 							alt="image preview"
 						/>
 						<div class="form-group">
-							<label for="name">Name</label>
-							<input id="name" v-model="tempProduct.name" class="form-control" type="text" name="" />
+							<label for="title">Title</label>
+							<input id="title" v-model="tempProduct.title" class="form-control" type="text" name="" />
 						</div>
 						<div class="form-group">
 							<label for="category">Category</label>
@@ -51,20 +51,20 @@
 							<input id="unit" v-model="tempProduct.unit" class="form-control" type="text" name="" />
 						</div>
 						<div class="form-group">
-							<label for="listPrice">List Price</label>
+							<label for="origin_price">List Price</label>
 							<input
-								id="listPrice"
-								v-model="tempProduct.listPrice"
+								id="origin_price"
+								v-model="tempProduct.origin_price"
 								class="form-control"
 								type="number"
 								name=""
 							/>
 						</div>
 						<div class="form-group">
-							<label for="retailPrice">Retail Price</label>
+							<label for="price">Retail Price</label>
 							<input
-								id="retailPrice"
-								v-model="tempProduct.retailPrice"
+								id="price"
+								v-model="tempProduct.price"
 								class="form-control"
 								type="number"
 								name=""
@@ -96,7 +96,7 @@
 								class="form-check-input"
 								type="checkbox"
 								name=""
-								v-model="tempProduct.status"
+								v-model="tempProduct.enabled"
 							/>
 							<label for="enable" class="form-check-label">Enable</label>
 						</div>

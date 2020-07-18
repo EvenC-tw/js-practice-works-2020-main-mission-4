@@ -6,10 +6,10 @@
 			<thead class="thead-dark">
 				<tr>
 					<th>Category</th>
-					<th>Product Name</th>
+					<th>Product Title</th>
 					<th>List Price</th>
 					<th>Retail Price</th>
-					<th>Status</th>
+					<th>Enabled</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
@@ -17,11 +17,11 @@
 				<template v-if="productList.length > 0">
 					<tr v-for="product in productList" :key="product.id">
 						<td>{{ product.category }}</td>
-						<td>{{ product.name }}</td>
-						<td>{{ product.listPrice && product.listPrice.toLocaleString() }}</td>
-						<td>{{ product.retailPrice && product.retailPrice.toLocaleString() }}</td>
-						<td :class="[product.status ? 'enabled' : 'disabled']">
-							{{ product.status ? 'enabled' : 'disabled' }}
+						<td>{{ product.title }}</td>
+						<td>{{ product.origin_price && product.origin_price.toLocaleString() }}</td>
+						<td>{{ product.price && product.price.toLocaleString() }}</td>
+						<td :class="[product.enabled ? 'enabled' : 'disabled']">
+							{{ product.enabled ? 'enabled' : 'disabled' }}
 						</td>
 						<td>
 							<div class="btn-group" role="group" aria-label="Button group">
@@ -51,7 +51,9 @@
 		<nav aria-label="Page navigation example">
 			<ul class="pagination">
 				<li :class="[pagination.current_page === 1 ? 'disabled' : '', 'page-item']">
-					<a class="page-link" href="#">Previous</a>
+					<a class="page-link" href="#" @click.prevent="getProductList(pagination.current_page - 1)"
+						>Previous</a
+					>
 				</li>
 				<li
 					:class="[pagination.current_page === index + 1 ? 'active' : '', 'page-item']"
@@ -61,7 +63,7 @@
 					<a class="page-link" href="#" @click.prevent="getProductList(index + 1)">{{ index + 1 }}</a>
 				</li>
 				<li :class="[pagination.current_page === pagination.total_pages ? 'disabled' : '', 'page-item']">
-					<a class="page-link" href="#">Next</a>
+					<a class="page-link" href="#" @click.prevent="getProductList(pagination.current_page + 1)">Next</a>
 				</li>
 			</ul>
 		</nav>
@@ -116,13 +118,12 @@ module.exports = {
 			})
 		},
 		createProduct(tempProduct) {
-			apis.createProduct(this.revertProduct(tempProduct), (res) => {
+			apis.createProduct(tempProduct, (res) => {
 				this.getProductList()
 			})
 		},
 		updateProduct(data) {
-			const { id, tempProduct } = data
-			apis.updateProduct({ id, tempProduct: this.revertProduct(tempProduct) }, (res) => {
+			apis.updateProduct(data, (res) => {
 				this.getProductList()
 			})
 		},
@@ -131,69 +132,9 @@ module.exports = {
 		},
 		getProductList(page = 1) {
 			apis.getProductList({ page }, (res) => {
-				res.data && this.convertProduct(res.data)
+				res.data && (this.productList = res.data)
 				res.meta && res.meta.pagination && (this.pagination = res.meta.pagination)
 			})
-		},
-		convert(product) {
-			const { id, title, category, content, imageUrl, enabled, origin_price, price, unit } = product
-			return {
-				id,
-				name: title,
-				category,
-				content,
-				description: '',
-				imageUrl,
-				status: enabled,
-				listPrice: origin_price,
-				retailPrice: price,
-				unit,
-				options: null,
-			}
-		},
-		revert(product) {
-			const {
-				id,
-				name,
-				category,
-				content,
-				description,
-				imageUrl,
-				status,
-				listPrice,
-				retailPrice,
-				unit,
-				options,
-			} = product
-			return {
-				id,
-				title: name,
-				category,
-				content,
-				description,
-				imageUrl,
-				enabled: status,
-				origin_price: listPrice,
-				price: retailPrice,
-				unit,
-				options: options,
-			}
-		},
-		convertProduct(data) {
-			const isArray = Array.isArray(data)
-			if (isArray) {
-				this.productList = data.map((item) => this.convert(item))
-			} else {
-				return this.convert(data)
-			}
-		},
-		revertProduct(data) {
-			const isArray = Array.isArray(data)
-			if (isArray) {
-				this.productList = data.map((item) => this.revert(item))
-			} else {
-				return this.revert(data)
-			}
 		},
 	},
 	updated() {},
