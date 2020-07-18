@@ -34,7 +34,7 @@ var app = new Vue({
 			setAxios.setHead('Authorization', `Bearer ${token}`)
 		},
 	},
-	mounted() {
+	created() {
 		this.loginData.token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, '$1')
 		if (this.loginData.token !== '') {
 			this.loginData.status = true

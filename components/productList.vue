@@ -1,6 +1,6 @@
 <template>
 	<div :class="[isModalShow ? 'opa-50' : '', 'container-fluid py-5']">
-		<button type="button" class="btn btn-primary float-right" @click="showModal('create')">Create</button>
+		<button type="button" class="btn btn-primary float-right" @click="editProduct('create')">Create</button>
 		<table class="table">
 			<h1>List of Products</h1>
 			<thead class="thead-dark">
@@ -28,7 +28,7 @@
 								<button
 									type="button"
 									class="btn btn-outline-primary"
-									@click="showModal('edit', product.id)"
+									@click="editProduct('edit', product.id)"
 								>
 									Edit
 								</button>
@@ -89,32 +89,14 @@ module.exports = {
 	},
 	created() {
 		this.$bus.$on('productList.createProduct', this.createProduct)
-		this.$bus.$on('productList.updateModalShow', this.updateModalShow)
+		this.$bus.$on('productList.updateisModalShow', this.updateisModalShow)
 		this.$bus.$on('productList.updateProduct', this.updateProduct)
 	},
 	methods: {
-		showModal(type, id) {
-			let title = ''
-			let tempProduct = { imageUrl: [] }
-			switch (type) {
-				case 'create':
-					const newId = new Date().getTime()
-					title = 'Create Product'
-					tempProduct.id = newId
-					break
-				case 'edit':
-					title = 'Edit Product'
-					tempProduct = { ...this.productList.find((product) => product.id === id) }
-					break
-				default:
-					break
-			}
-			this.$bus.$emit('productModal.showModal', { type, title })
-			this.$bus.$emit('productModal.updateTempProduct', tempProduct)
-		},
-		deleteProduct(id) {
-			apis.deleteProduct({ id }, (res) => {
-				this.getProductList()
+		getProductList(page = 1) {
+			apis.getProductList({ page }, (res) => {
+				res.data && (this.productList = res.data)
+				res.meta && res.meta.pagination && (this.pagination = res.meta.pagination)
 			})
 		},
 		createProduct(tempProduct) {
@@ -122,23 +104,50 @@ module.exports = {
 				this.getProductList()
 			})
 		},
+		getProduct(id, callback) {
+			apis.getProduct({ id }, callback)
+		},
+		editProduct(type, id) {
+			let title = ''
+			let tempProduct = { imageUrl: [] }
+			switch (type) {
+				case 'create':
+					const newId = new Date().getTime()
+					title = 'Create Product'
+					tempProduct.id = newId
+					this.updateShowModalData({ type, title, tempProduct })
+					break
+				case 'edit':
+					title = 'Edit Product'
+					this.getProduct(id, (res) => {
+						tempProduct = res.data
+						this.updateShowModalData({ type, title, tempProduct })
+					})
+					break
+				default:
+					break
+			}
+		},
 		updateProduct(data) {
 			apis.updateProduct(data, (res) => {
 				this.getProductList()
 			})
 		},
-		updateModalShow(data) {
-			this.isModalShow = data
-		},
-		getProductList(page = 1) {
-			apis.getProductList({ page }, (res) => {
-				res.data && (this.productList = res.data)
-				res.meta && res.meta.pagination && (this.pagination = res.meta.pagination)
+		deleteProduct(id) {
+			apis.deleteProduct({ id }, (res) => {
+				this.getProductList()
 			})
 		},
+		updateShowModalData(data) {
+			const { type, title, tempProduct } = data
+			this.$bus.$emit('productModal.showModal', { type, title })
+			this.$bus.$emit('productModal.updateTempProduct', tempProduct)
+		},
+		updateisModalShow(data) {
+			this.isModalShow = data
+		},
 	},
-	updated() {},
-	mounted() {
+	created() {
 		if (this.loginStatus) {
 			this.getProductList()
 		}

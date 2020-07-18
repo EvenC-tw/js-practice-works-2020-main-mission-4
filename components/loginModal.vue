@@ -69,15 +69,18 @@ module.exports = {
 		handleLogin() {
 			apis.login(this.loginForm, (res) => {
 				this.$emit('getLoginData', res)
+				this.$bus.$emit('productList.updateisModalShow', false)
 			})
 		},
 	},
 	created() {
 		this.modal.enable = !this.loginStatus
+		this.$bus.$emit('productList.updateisModalShow', this.modal.enable)
 	},
 	watch: {
 		loginStatus(curr, prev) {
 			this.modal.enable = !curr
+			this.$bus.$emit('productList.updateisModalShow', this.modal.enable)
 		},
 	},
 }

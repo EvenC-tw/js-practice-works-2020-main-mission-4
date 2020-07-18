@@ -154,14 +154,14 @@ module.exports = {
 		hideModal() {
 			this.tempProduct = {}
 			this.modal.enable = false
-			this.$bus.$emit('productList.updateModalShow', false)
+			this.$bus.$emit('productList.updateisModalShow', false)
 		},
 		showModal(data) {
 			const { type, title } = data
 			this.modal.enable = true
 			this.modal.type = type
 			this.modal.title = title
-			this.$bus.$emit('productList.updateModalShow', true)
+			this.$bus.$emit('productList.updateisModalShow', true)
 		},
 	},
 }

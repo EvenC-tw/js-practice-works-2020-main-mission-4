@@ -31,16 +31,23 @@ const apis = {
 			.then((res) => proxies.callbackPX(res, callback))
 			.catch(proxies.errorPX)
 	},
+	getProductList(data, callback) {
+		const { page } = data
+		axios
+			.get(`${uuid}/admin/ec/products?page=${page}`)
+			.then((res) => proxies.callbackPX(res, callback))
+			.catch(proxies.errorPX)
+	},
 	createProduct(data, callback) {
 		axios
 			.post(`${uuid}/admin/ec/product`, data)
 			.then((res) => proxies.callbackPX(res, callback))
 			.catch(proxies.errorPX)
 	},
-	getProductList(data, callback) {
-		const { page } = data
+	getProduct(data, callback) {
+		const { id } = data
 		axios
-			.get(`${uuid}/admin/ec/products?page=${page}`)
+			.get(`${uuid}/admin/ec/product/${id}`)
 			.then((res) => proxies.callbackPX(res, callback))
 			.catch(proxies.errorPX)
 	},
