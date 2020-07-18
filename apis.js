@@ -11,13 +11,12 @@ const proxies = {
 	errorPX(err) {
 		// TODO some error handle
 		if (err && err.response && err.response.status) {
-			switch (status) {
+			switch (err.response.status) {
 				case 401:
 					document.cookie = `token=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`
 					setAxios.setHead('Authorization', `Bearer ${token}`)
 					location.reload()
 					break
-
 				default:
 					break
 			}
