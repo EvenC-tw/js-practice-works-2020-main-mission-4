@@ -23,7 +23,6 @@ var app = new Vue({
 	`,
 	methods: {
 		setLoginData(data) {
-			console.log(data)
 			const { success, expired, token } = data
 			if (!success) return
 			this.loginData.status = success
@@ -33,7 +32,6 @@ var app = new Vue({
 			document.cookie = `token=${token};expires=${new Date(expired * 1000)}; path=/`
 
 			setAxios.setHead('Authorization', `Bearer ${token}`)
-			console.log(axios.defaults.headers.common['Authorization'])
 		},
 	},
 	mounted() {
@@ -42,8 +40,5 @@ var app = new Vue({
 			this.loginData.status = true
 			setAxios.setHead('Authorization', `Bearer ${token}`)
 		}
-	},
-	updated() {
-		console.log(this.loginData)
 	},
 })

@@ -48,6 +48,19 @@
 				</template>
 			</tbody>
 		</table>
+		<nav aria-label="Page navigation example">
+			<ul class="pagination">
+				<li :class="[pagination.current_page === 1 ? 'disabled' : '', 'page-item']">
+					<a class="page-link" href="#">Previous</a>
+				</li>
+				<li class="page-item" v-for="(page, index) in pagination.total_pages" :key="index">
+					<a class="page-link" href="#" @click.prevent="getProductList(index + 1)">{{ index + 1 }}</a>
+				</li>
+				<li :class="[pagination.current_page === pagination.total_pages ? 'disabled' : '', 'page-item']">
+					<a class="page-link" href="#">Next</a>
+				</li>
+			</ul>
+		</nav>
 	</div>
 </template>
 
@@ -57,6 +70,14 @@ module.exports = {
 	data() {
 		return {
 			productList: [],
+			pagination: {
+				total: 1,
+				count: 1,
+				per_page: 25,
+				current_page: 1,
+				total_pages: 1,
+				links: {},
+			},
 			isModalShow: false,
 		}
 	},
@@ -104,9 +125,10 @@ module.exports = {
 		updateModalShow(data) {
 			this.isModalShow = data
 		},
-		getProductList() {
-			apis.getProductList({ uuid: this.uuid }, (res) => {
+		getProductList(page = 1) {
+			apis.getProductList({ page }, (res) => {
 				res.data && this.convertProduct(res.data)
+				res.meta && res.meta.pagination && (this.pagination = res.meta.pagination)
 			})
 		},
 		convert(product) {

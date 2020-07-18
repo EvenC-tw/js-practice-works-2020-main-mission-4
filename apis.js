@@ -18,6 +18,7 @@ const proxies = {
 		switch (status) {
 			case 401:
 				document.cookie = `token=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`
+				setAxios.setHead('Authorization', `Bearer ${token}`)
 				location.reload()
 				break
 
@@ -31,32 +32,33 @@ const apis = {
 		axios
 			.post(`auth/login`, data)
 			.then((res) => proxies.callbackPX(res, callback))
-			.catch(proxies)
+			.catch(proxies.errorPX)
 	},
 	createProduct(data, callback) {
 		axios
 			.post(`${uuid}/admin/ec/product`, data)
 			.then((res) => proxies.callbackPX(res, callback))
-			.catch(proxies)
+			.catch(proxies.errorPX)
 	},
 	getProductList(data, callback) {
+		const { page } = data
 		axios
-			.get(`${uuid}/admin/ec/products`)
+			.get(`${uuid}/admin/ec/products?page=${page}`, data)
 			.then((res) => proxies.callbackPX(res, callback))
-			.catch(proxies)
+			.catch(proxies.errorPX)
 	},
 	updateProduct(data, callback) {
 		const { id, tempProduct } = data
 		axios
 			.patch(`${uuid}/admin/ec/product/${id}`, tempProduct)
 			.then((res) => proxies.callbackPX(res, callback))
-			.catch(proxies)
+			.catch(proxies.errorPX)
 	},
 	deleteProduct(data, callback) {
 		const { id } = data
 		axios
 			.delete(`${uuid}/admin/ec/product/${id}`)
 			.then((res) => proxies.callbackPX(res, callback))
-			.catch(proxies)
+			.catch(proxies.errorPX)
 	},
 }
