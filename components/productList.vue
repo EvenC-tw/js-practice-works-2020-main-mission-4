@@ -89,8 +89,11 @@ module.exports = {
 	},
 	created() {
 		this.$bus.$on('productList.createProduct', this.createProduct)
-		this.$bus.$on('productList.updateisModalShow', this.updateisModalShow)
+		this.$bus.$on('productList.updateIsModalShow', this.updateIsModalShow)
 		this.$bus.$on('productList.updateProduct', this.updateProduct)
+		if (this.loginStatus) {
+			this.getProductList()
+		}
 	},
 	methods: {
 		getProductList(page = 1) {
@@ -143,14 +146,9 @@ module.exports = {
 			this.$bus.$emit('productModal.showModal', { type, title })
 			this.$bus.$emit('productModal.updateTempProduct', tempProduct)
 		},
-		updateisModalShow(data) {
+		updateIsModalShow(data) {
 			this.isModalShow = data
 		},
-	},
-	created() {
-		if (this.loginStatus) {
-			this.getProductList()
-		}
 	},
 	watch: {
 		loginStatus(curr, prev) {
